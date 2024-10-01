@@ -1,0 +1,14 @@
+{
+  "name": "suburb-walkability",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "openrouteservice-js": "^0.4.1"
+  }
+}
