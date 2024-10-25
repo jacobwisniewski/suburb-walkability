@@ -1,0 +1,101 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis(schema: "public")]
+}
+
+model isochrone {
+  id                      Int                       @id(map: "PK_d113eacff60341fb0b5a78b99b9") @default(autoincrement())
+  transportType           String                    @db.VarChar
+  method                  String                    @db.VarChar
+  value                   Int
+  geom                    Unsupported("geometry")
+  locationId              Int
+  location_with_isochrone location_with_isochrone[]
+}
+
+model location {
+  id               Int                     @id(map: "PK_876d7bdba03c72251ec4c2dc827") @default(autoincrement())
+  geom             Unsupported("geometry")
+  ptv_station      ptv_station?
+  woolworths_store woolworths_store?
+}
+
+model location_with_isochrone {
+  id          Int        @id(map: "PK_03c2727c633f935e3430af23c90") @default(autoincrement())
+  isochroneId Int?
+  isochrone   isochrone? @relation(fields: [isochroneId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_3f08538140207107ae0ee855e07")
+}
+
+model migrations {
+  id        Int    @id(map: "PK_8c82d7f526340ab734260ea46be") @default(autoincrement())
+  timestamp BigInt
+  name      String @db.VarChar
+}
+
+model ptv_station {
+  stopId   String   @db.VarChar
+  stopName String   @db.VarChar
+  lineName String   @db.VarChar
+  id       Int      @id(map: "PK_4190e8461dafeeb904af92c999b")
+  location location @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_4190e8461dafeeb904af92c999b")
+}
+
+model sa1 {
+  code        String                  @id(map: "PK_4ca1da08c5658c4497ce92cfe8c") @db.VarChar
+  changeFlag  String                  @db.VarChar
+  changeLabel String                  @db.VarChar
+  sa2Code     String                  @db.VarChar
+  sa2Name     String                  @db.VarChar
+  sa3Code     String                  @db.VarChar
+  sa3Name     String                  @db.VarChar
+  sa4Code     String                  @db.VarChar
+  sa4Name     String                  @db.VarChar
+  gccCode     String                  @db.VarChar
+  gccName     String                  @db.VarChar
+  stateCode   String                  @db.VarChar
+  stateName   String                  @db.VarChar
+  countryCode String                  @db.VarChar
+  countryName String                  @db.VarChar
+  areaSqKm    Float?
+  lociUri     String                  @db.VarChar
+  geometry    Unsupported("geometry")
+}
+
+model sal {
+  code        String                  @id(map: "PK_0c749f9af14b005fe392e5528b3") @db.VarChar
+  name        String                  @db.VarChar
+  stateCode   String                  @db.VarChar
+  stateName   String                  @db.VarChar
+  countryCode String                  @db.VarChar
+  countryName String                  @db.VarChar
+  areaSqKm    Float
+  lociUri     String                  @db.VarChar
+  shapeLength Float
+  shapeArea   Float
+  geometry    Unsupported("geometry")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+model woolworths_store {
+  name       String   @db.VarChar
+  streetName String   @db.VarChar
+  town       String   @db.VarChar
+  state      String   @db.VarChar
+  postcode   String   @db.VarChar
+  id         Int      @id(map: "PK_183ed4350c426220f1635350440")
+  location   location @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_183ed4350c426220f1635350440")
+}
