@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - datasets/**
+  workflow_dispatch:
 
 jobs:
   upload:
