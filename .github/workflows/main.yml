@@ -1,10 +1,5 @@
 name: Upload Chunked Data to Oracle Cloud
 
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   upload:
     runs-on: ubuntu-latest
