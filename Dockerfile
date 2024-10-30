@@ -24,8 +24,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY src ./src
 COPY public ./public
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-COPY next.config.js ./
-COPY tsconfig.json ./
+COPY next.config.js tsconfig.json ./
+COPY tailwind.config.js postcss.config.js ./
 COPY .env ./
 
 # Next.js collects completely anonymous telemetry data about general usage.
