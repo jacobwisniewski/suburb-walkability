@@ -7,9 +7,6 @@ import { QueryBodyParams, QueryResponse } from "@/pages/api/query";
 import { MapLayer } from "./MapLayer";
 import { LayerToggle } from "./LayerToggle";
 import turf from "turf";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export const Body = styled.div`
   margin: 0;
@@ -41,7 +38,6 @@ const Home = () => {
   const [data, setData] = useState<ComponentProps<typeof MapLayer>[] | null>(
     null,
   );
-  const [isLoading, setIsLoading] = useState(false);
   const [visibleLayers, setVisibleLayers] = useState<{
     [key: string]: boolean;
   }>({});
@@ -51,26 +47,21 @@ const Home = () => {
   const mapRef = React.useRef<MapRef>(null);
 
   useEffect(() => {
-    if (!data && !isLoading) {
-      setIsLoading(true);
-      fetchDataAndLoadLayers({
-        commuteFilters: [
-          {
-            poi: "ptv-stations",
-            type: "foot-walking",
-            method: "time",
-            value: 600,
-          },
-        ],
-        minPrice: 0,
-        maxPrice: 1000000,
-        minBedrooms: 1,
-        propertyTypes: ["house", "unit"],
-      }).then(() => {
-        setIsLoading(false);
-      });
-    }
-  }, [data, isLoading]);
+    fetchDataAndLoadLayers({
+      commuteFilters: [
+        {
+          poi: "ptv-stations",
+          type: "foot-walking",
+          method: "time",
+          value: 600,
+        },
+      ],
+      minPrice: 0,
+      maxPrice: 1000000,
+      minBedrooms: 1,
+      propertyTypes: ["house", "unit"],
+    });
+  }, []);
 
   const fetchDataAndLoadLayers = async (
     filters: QueryBodyParams,

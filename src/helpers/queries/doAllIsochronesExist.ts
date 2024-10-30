@@ -3,7 +3,6 @@ import { AppDataSource } from "@/data-source";
 import { Location } from "@/entity/Location";
 
 import { IsochroneFilter } from "@/pages/api/poiValues";
-import { createConnection } from "typeorm";
 
 export const doAllIsochronesExist = async ({
   poi,
