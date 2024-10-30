@@ -7,6 +7,9 @@ import { QueryBodyParams, QueryResponse } from "@/pages/api/query";
 import { MapLayer } from "./MapLayer";
 import { LayerToggle } from "./LayerToggle";
 import turf from "turf";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const Body = styled.div`
   margin: 0;
