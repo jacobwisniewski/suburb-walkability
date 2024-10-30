@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { SAL } from "./SAL";
 
-@Entity()
+@Entity("property_price")
 export class PropertyPrice {
   @PrimaryGeneratedColumn()
   id: number;

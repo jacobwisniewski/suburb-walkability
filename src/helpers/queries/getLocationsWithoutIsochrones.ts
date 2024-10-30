@@ -1,4 +1,4 @@
-import { getEntityFromPoi } from "./getEntityFromPoiType";
+import { getEntityFromPoi, getTableNameFromPoi } from "./getEntityFromPoiType";
 import { Location } from "@/entity/Location";
 import { AppDataSource } from "@/data-source";
 
@@ -10,7 +10,7 @@ export const getLocationsWithoutIsochrones = async ({
   method,
   value,
 }: IsochroneFilter): Promise<Location[]> => {
-  const entity = getEntityFromPoi(poi);
+  const entity = getTableNameFromPoi(poi);
 
   return await AppDataSource.manager
     .createQueryBuilder(Location, "location")

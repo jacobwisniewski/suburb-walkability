@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, type Polygon } from "typeorm";
 
-@Entity()
+@Entity("isochrone")
 export class Isochrone {
   @PrimaryGeneratedColumn()
   id: number;

@@ -3,12 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   type Point,
-  OneToMany, ManyToOne,
+  OneToMany,
+  ManyToOne,
 } from "typeorm";
 import { Isochrone } from "./Isochrone";
-import {LocationType} from "./LocationType";
+import { LocationType } from "./LocationType";
 
-@Entity()
+@Entity("location")
 export class Location {
   @PrimaryGeneratedColumn()
   id: number;

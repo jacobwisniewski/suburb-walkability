@@ -1,8 +1,9 @@
-import { getEntityFromPoi } from "./getEntityFromPoiType";
+import { getTableNameFromPoi } from "./getEntityFromPoiType";
 import { AppDataSource } from "@/data-source";
 import { Location } from "@/entity/Location";
 
 import { IsochroneFilter } from "@/pages/api/poiValues";
+import { createConnection } from "typeorm";
 
 export const doAllIsochronesExist = async ({
   poi,
@@ -10,7 +11,7 @@ export const doAllIsochronesExist = async ({
   method,
   value,
 }: IsochroneFilter): Promise<boolean> => {
-  const entity = getEntityFromPoi(poi);
+  const entity = getTableNameFromPoi(poi);
 
   // Query for getting number of locations that do not have the isochrone
   const count = await AppDataSource.manager

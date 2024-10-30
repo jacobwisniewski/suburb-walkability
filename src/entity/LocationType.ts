@@ -1,6 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity("location_type")
 export class LocationType {
   @PrimaryGeneratedColumn()
   id: number;

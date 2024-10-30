@@ -1,6 +1,6 @@
 import { Entity, PrimaryColumn, Column, type MultiPolygon } from "typeorm";
 
-@Entity()
+@Entity("sal")
 export class SAL {
   @PrimaryColumn("varchar")
   code: string;

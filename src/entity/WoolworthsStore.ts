@@ -1,7 +1,7 @@
 import { Entity, Column, OneToOne, JoinColumn, PrimaryColumn } from "typeorm";
 import { Location } from "./Location";
 
-@Entity()
+@Entity("woolworths_store")
 export class WoolworthsStore {
   @PrimaryColumn("integer")
   id: number;

@@ -8,6 +8,7 @@ export const initializeAppDataSource = async (): Promise<void> => {
   if (!AppDataSource.isInitialized) {
     try {
       await AppDataSource.initialize();
+      console.log("Data source initialized");
     } catch (error) {
       console.error("Failed to initialize data source:", error);
     }
