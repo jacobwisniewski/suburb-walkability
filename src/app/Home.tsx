@@ -180,7 +180,7 @@ const Home = () => {
             zoom: 10,
           }}
           style={{ width: "100%", height: "100%" }}
-          mapStyle={`https://api.maptiler.com/maps/positron/style.json?key=${process.env.MAPTILER_API_KEY}`}
+          mapStyle={`https://api.maptiler.com/maps/positron/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_API_KEY}`}
           interactive={true}
           interactiveLayerIds={["pocketsLayer"]}
           onClick={handlePocketClick}
