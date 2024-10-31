@@ -35,14 +35,12 @@ export const getPocketsFromIsochroneFilters = async (
     JOIN intersection ON ST_Intersects(sa1.geometry, intersection.intersection)
   `;
 
-  console.time("getPocketsFromIsochroneFilters");
   const sa1Results = (await AppDataSource.manager.query(combinedQuery, [
     minPrice,
     maxPrice,
     minBedrooms,
     propertyTypes,
   ])) as { geometry: string; sa1Code: string; salCode: string }[];
-  console.timeEnd("getPocketsFromIsochroneFilters");
 
   return {
     type: "FeatureCollection",

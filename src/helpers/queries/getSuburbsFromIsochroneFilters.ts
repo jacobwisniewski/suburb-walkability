@@ -27,14 +27,12 @@ export const getSuburbsFromIsochroneFilters = async (
     JOIN intersection ON ST_Intersects(fp.geometry, intersection.intersection)
   `;
 
-  console.time("getSuburbsFromIsochroneFilters");
   const results = (await AppDataSource.manager.query(combinedQuery, [
     minPrice,
     maxPrice,
     minBedrooms,
     propertyTypes,
   ])) as { geometry: string; salCode: string }[];
-  console.timeEnd("getSuburbsFromIsochroneFilters");
 
   return {
     type: "FeatureCollection",
