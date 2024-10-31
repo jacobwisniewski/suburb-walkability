@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -36,7 +36,7 @@ interface IsochroneFilterFormProps {
 export default function IsochroneFilterForm({
   onSubmit,
 }: IsochroneFilterFormProps) {
-  const [filters, setFilters] = useState<IsochroneFilter[]>([
+  const [commuteFilters, setCommuteFilters] = useState<IsochroneFilter[]>([
     { poi: "ptv-stations", type: "foot-walking", method: "time", value: 30 },
   ]);
   const [minPrice, setMinPrice] = useState<number>(0);
@@ -49,17 +49,30 @@ export default function IsochroneFilterForm({
   const [revealForm, setRevealForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const savedFilters = localStorage.getItem("isochroneFilters");
+    if (savedFilters) {
+      const { commuteFilters, minPrice, maxPrice, minBedrooms, propertyTypes } =
+        JSON.parse(savedFilters);
+      setCommuteFilters(commuteFilters);
+      setMinPrice(minPrice);
+      setMaxPrice(maxPrice);
+      setMinBedrooms(minBedrooms);
+      setPropertyTypes(propertyTypes);
+    }
+  }, []);
+
   const priceOptions = [
     ...Array.from({ length: 20 }, (_, i) => i * 50000),
     ...Array.from({ length: 10 }, (_, i) => 1000000 + i * 100000),
   ];
 
   const handleAddFilter = () => {
-    setFilters([
-      ...filters,
+    setCommuteFilters([
+      ...commuteFilters,
       {
         poi: poiValues.filter((poi) => {
-          return !filters.some((filter) => filter.poi === poi);
+          return !commuteFilters.some((filter) => filter.poi === poi);
         })[0],
         type: "foot-walking",
         method: "time",
@@ -69,7 +82,7 @@ export default function IsochroneFilterForm({
   };
 
   const handleRemoveFilter = (index: number) => {
-    setFilters(filters.filter((_, i) => i !== index));
+    setCommuteFilters(commuteFilters.filter((_, i) => i !== index));
   };
 
   const handleChange = (
@@ -77,25 +90,24 @@ export default function IsochroneFilterForm({
     field: keyof IsochroneFilter,
     value: string | number,
   ) => {
-    const newFilters = filters.map((filter, i) =>
+    const newFilters = commuteFilters.map((filter, i) =>
       i === index ? { ...filter, [field]: value } : filter,
     );
-    setFilters(newFilters);
+    setCommuteFilters(newFilters);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    await onSubmit({
-      commuteFilters: filters.map((filter) => ({
-        ...filter,
-        value: filter.value * 60,
-      })),
+    const filterParams = {
+      commuteFilters,
       minPrice,
       maxPrice,
       minBedrooms,
       propertyTypes,
-    });
+    };
+    localStorage.setItem("isochroneFilters", JSON.stringify(filterParams));
+    await onSubmit(filterParams);
     setRevealForm(false);
     setIsLoading(false);
   };
@@ -106,7 +118,8 @@ export default function IsochroneFilterForm({
     );
   };
 
-  const usedPoiValues = getUsedFilterValues(filters, "poi");
+  console.log(commuteFilters);
+  const usedPoiValues = getUsedFilterValues(commuteFilters, "poi");
 
   return (
     <Card
@@ -122,7 +135,7 @@ export default function IsochroneFilterForm({
               <CardTitle>Isochrone Filters</CardTitle>
             </CardHeader>
             <CardContent>
-              {filters.map((filter, index) => (
+              {commuteFilters.map((filter, index) => (
                 <div key={index} className="flex flex-col space-y-4 mb-6">
                   <div className={"flex space-x-2"}>
                     <Select
@@ -189,7 +202,7 @@ export default function IsochroneFilterForm({
                         <SelectItem value="distance">Distance</SelectItem>
                       </SelectContent>
                     </Select>
-                    {filters.length > 1 && (
+                    {commuteFilters.length > 1 && (
                       <Button
                         type="button"
                         variant="destructive"

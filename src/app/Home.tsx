@@ -47,20 +47,25 @@ const Home = () => {
   const mapRef = React.useRef<MapRef>(null);
 
   useEffect(() => {
-    fetchDataAndLoadLayers({
-      commuteFilters: [
-        {
-          poi: "ptv-stations",
-          type: "foot-walking",
-          method: "time",
-          value: 600,
-        },
-      ],
-      minPrice: 0,
-      maxPrice: 1000000,
-      minBedrooms: 1,
-      propertyTypes: ["house", "unit"],
-    });
+    const savedFilters = localStorage.getItem("isochroneFilters");
+    const initialFilters: QueryBodyParams = savedFilters
+      ? JSON.parse(savedFilters)
+      : {
+          commuteFilters: [
+            {
+              poi: "ptv-stations",
+              type: "foot-walking",
+              method: "time",
+              value: 10,
+            },
+          ],
+          minPrice: 0,
+          maxPrice: 1000000,
+          minBedrooms: 1,
+          propertyTypes: ["house", "unit"],
+        };
+
+    fetchDataAndLoadLayers(initialFilters);
   }, []);
 
   const fetchDataAndLoadLayers = async (
@@ -72,7 +77,13 @@ const Home = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(filters),
+        body: JSON.stringify({
+          ...filters,
+          commuteFilters: filters.commuteFilters.map((filter) => ({
+            ...filter,
+            value: filter.value * 60,
+          })),
+        }),
       })
     ).json();
 
