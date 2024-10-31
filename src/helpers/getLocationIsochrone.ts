@@ -13,6 +13,7 @@ export const getIsochroneForLocation = async (
   value: number = 900,
 ): Promise<Isochrone | null> => {
   try {
+    console.log("ENV IS", process.env["OPEN_ROUTE_SERVICE_HOST"]);
     const response = await getIsochrone(
       location.geom.coordinates as [number, number],
       transportType,
@@ -33,12 +34,13 @@ export const getIsochroneForLocation = async (
     await AppDataSource.manager.save(isochrone);
 
     return isochrone;
-  } catch {
+  } catch (error) {
     console.error("Failed to fetch isochrone:", {
       locationId: location.id,
       transportType,
       method,
       value,
+      error,
     });
     return null;
   }

@@ -1,14 +1,8 @@
-import dotenv from "dotenv";
-import type {IsochroneResponse} from "./types.ts";
+import type { IsochroneResponse } from "./types.ts";
 import { baseApiClient } from "../baseClient";
 
-dotenv.config();
-
-const BASE_URL =
-  process.env["OPEN_ROUTE_SERVICE_HOST"] ?? "https://api.openrouteservice.org";
-
 export const openRouteServiceApi = baseApiClient.extend({
-  prefixUrl: BASE_URL,
+  prefixUrl: process.env["OPEN_ROUTE_SERVICE_HOST"],
   headers: {
     Accept: "application/geo+json;charset=UTF-8",
   },
