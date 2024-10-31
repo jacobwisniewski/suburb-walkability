@@ -40,7 +40,6 @@ export default async function handler(
     const { commuteFilters, minPrice, maxPrice, minBedrooms, propertyTypes } =
       req.body as QueryBodyParams;
 
-    console.time("checkIsochrones");
     for (const filter of commuteFilters) {
       const allIsochronesExist = await doAllIsochronesExist(filter);
 
@@ -57,9 +56,7 @@ export default async function handler(
         }
       }
     }
-    console.timeEnd("checkIsochrones");
 
-    console.time("getSuburbsWithFilters");
     const { commutePolygon, pocketPolygons, suburbPolygons } =
       await getSuburbsWithFilters({
         commuteFilters,
@@ -68,7 +65,6 @@ export default async function handler(
         minBedrooms,
         propertyTypes,
       });
-    console.timeEnd("getSuburbsWithFilters");
 
     res.status(200).json({
       pocketPolygons,
