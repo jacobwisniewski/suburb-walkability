@@ -13,23 +13,28 @@ export const getSuburbsFromIsochroneFilters = async (
   const intersectionQuery = getIntersectionQuery(filters);
 
   const combinedQuery = `
-    ${intersectionQuery}
-      
-    SELECT DISTINCT ON (sal.geometry) ST_AsGeoJSON(sal.geometry) AS geometry, sal.code AS "salCode"
-    FROM sal 
+    ${intersectionQuery},
+    filtered_properties AS (
+      SELECT sal.code AS "salCode", sal.geometry
+      FROM sal
       JOIN property_price pp ON sal.code = pp."salCode"
-      JOIN intersection ON ST_Intersects(sal.geometry, intersection.intersection)
-    WHERE pp.value BETWEEN $1 AND $2
-      AND pp.bedrooms >= $3
-      AND pp.type = ANY($4)
+      WHERE pp.value BETWEEN $1 AND $2
+        AND pp.bedrooms >= $3
+        AND pp.type = ANY($4)
+    )
+    SELECT DISTINCT ON (fp.geometry) ST_AsGeoJSON(fp.geometry) AS geometry, fp."salCode"
+    FROM filtered_properties fp
+    JOIN intersection ON ST_Intersects(fp.geometry, intersection.intersection)
   `;
 
+  console.time("getSuburbsFromIsochroneFilters");
   const results = (await AppDataSource.manager.query(combinedQuery, [
     minPrice,
     maxPrice,
     minBedrooms,
     propertyTypes,
   ])) as { geometry: string; salCode: string }[];
+  console.timeEnd("getSuburbsFromIsochroneFilters");
 
   return {
     type: "FeatureCollection",

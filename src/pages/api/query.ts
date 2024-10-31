@@ -30,18 +30,17 @@ export interface QueryResponse {
   >;
   suburbPolygons: FeatureCollection<Polygon, { salCode: string }>;
 }
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<QueryResponse | { error: string }>,
 ) {
   try {
     await initializeAppDataSource();
+
     const { commuteFilters, minPrice, maxPrice, minBedrooms, propertyTypes } =
       req.body as QueryBodyParams;
 
-    // Check if the isochrones for the commute filters are already in the database
-    // If not, fetch them and store them in the database
+    console.time("checkIsochrones");
     for (const filter of commuteFilters) {
       const allIsochronesExist = await doAllIsochronesExist(filter);
 
@@ -58,8 +57,9 @@ export default async function handler(
         }
       }
     }
+    console.timeEnd("checkIsochrones");
 
-    // Query for the suburbs that satisfy the filters
+    console.time("getSuburbsWithFilters");
     const { commutePolygon, pocketPolygons, suburbPolygons } =
       await getSuburbsWithFilters({
         commuteFilters,
@@ -68,6 +68,7 @@ export default async function handler(
         minBedrooms,
         propertyTypes,
       });
+    console.timeEnd("getSuburbsWithFilters");
 
     res.status(200).json({
       pocketPolygons,

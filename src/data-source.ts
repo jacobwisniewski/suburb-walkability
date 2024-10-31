@@ -10,6 +10,7 @@ import { Coles } from "./entity/Coles";
 import { Aldi } from "./entity/Aldi";
 import { PropertyPrice } from "./entity/PropertyPrice";
 import dotenv from "dotenv";
+import { SA1SALMapping } from "@/entity/SA1SALMapping";
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ export const AppDataSource = new DataSource({
     Coles,
     Aldi,
     PropertyPrice,
+    SA1SALMapping,
   ],
   // migrations: ["src/migration/*{.ts,.js}"],
 });
