@@ -1,4 +1,4 @@
-import React, { ComponentProps } from "react";
+import React, { ComponentProps, useEffect } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,14 +7,36 @@ import { MapLayer } from "@/app/MapLayer";
 interface LayerToggleProps {
   layers: ComponentProps<typeof MapLayer>[];
   visibleLayers: { [key: string]: boolean };
-  onToggle: (layerId: string) => void;
+  setVisibleLayer: (
+    value:
+      | ((prevState: { [p: string]: boolean }) => { [p: string]: boolean })
+      | { [p: string]: boolean },
+  ) => void;
 }
 
 export function LayerToggle({
   layers,
   visibleLayers,
-  onToggle,
+  setVisibleLayer,
 }: LayerToggleProps) {
+  useEffect(() => {
+    const initialVisibleLayers = layers.reduce(
+      (acc, layer) => ({
+        ...acc,
+        [layer.id]: true,
+      }),
+      {},
+    );
+    setVisibleLayer(initialVisibleLayers);
+  }, []);
+
+  const handleToggleLayer = (layerId: string) => {
+    setVisibleLayer((prev) => ({
+      ...prev,
+      [layerId]: !prev[layerId],
+    }));
+  };
+
   return (
     <Card className="w-64">
       <CardContent className="p-4">
@@ -23,7 +45,7 @@ export function LayerToggle({
             <Checkbox
               id={layer.id}
               checked={visibleLayers[layer.id]}
-              onCheckedChange={() => onToggle(layer.id)}
+              onCheckedChange={() => handleToggleLayer(layer.id)}
             />
             <div
               className="w-4 h-4 border"

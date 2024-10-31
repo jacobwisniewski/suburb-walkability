@@ -117,13 +117,6 @@ const Home = () => {
     return;
   };
 
-  const handleToggleLayer = (layerId: string) => {
-    setVisibleLayers((prev) => ({
-      ...prev,
-      [layerId]: !prev[layerId],
-    }));
-  };
-
   const handlePocketClick = (event: MapLayerMouseEvent) => {
     if (!event.features?.at(0) || !data) return;
 
@@ -158,7 +151,7 @@ const Home = () => {
           <LayerToggle
             layers={data}
             visibleLayers={visibleLayers}
-            onToggle={handleToggleLayer}
+            setVisibleLayer={setVisibleLayers}
           />
         </LayerToggles>
       )}
