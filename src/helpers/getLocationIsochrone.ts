@@ -13,7 +13,6 @@ export const getIsochroneForLocation = async (
   value: number = 900,
 ): Promise<Isochrone | null> => {
   try {
-    console.log("ENV IS", process.env["OPEN_ROUTE_SERVICE_HOST"]);
     const response = await getIsochrone(
       location.geom.coordinates as [number, number],
       transportType,
