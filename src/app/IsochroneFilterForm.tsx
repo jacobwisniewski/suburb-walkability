@@ -199,7 +199,6 @@ export default function IsochroneFilterForm({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="time">Time</SelectItem>
-                        <SelectItem value="distance">Distance</SelectItem>
                       </SelectContent>
                     </Select>
                     {commuteFilters.length > 1 && (
@@ -219,7 +218,7 @@ export default function IsochroneFilterForm({
                     </div>
                     <Slider
                       min={5}
-                      max={120}
+                      max={60}
                       step={5}
                       value={[filter.value]}
                       onValueChange={(value) =>
