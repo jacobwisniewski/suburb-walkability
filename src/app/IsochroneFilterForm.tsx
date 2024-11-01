@@ -65,6 +65,8 @@ export default function IsochroneFilterForm({
   const priceOptions = [
     ...Array.from({ length: 20 }, (_, i) => i * 50000),
     ...Array.from({ length: 10 }, (_, i) => 1000000 + i * 100000),
+    ...Array.from({ length: 6 }, (_, i) => 2000000 + i * 500000),
+    ...Array.from({ length: 6 }, (_, i) => 5000000 + i * 1000000),
   ];
 
   const handleAddFilter = () => {
